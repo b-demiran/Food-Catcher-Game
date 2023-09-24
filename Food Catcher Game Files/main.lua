@@ -24,28 +24,28 @@ function love.load()
         vsync = true
     })
 
-    _G.start = love.graphics.newImage("Backdrops/start1.png")
-    _G.play = love.graphics.newImage("Backdrops/playResized.png")
-    _G.gameOver = love.graphics.newImage("Backdrops/gameOver.png")
-    _G.scoreBoard = love.graphics.newImage("Backdrops/scoreBoard.png")
-    _G.plateSprite = love.graphics.newImage("Sprites/plate2.png")
+    local start = love.graphics.newImage("Backdrops/start.png")
+    local play = love.graphics.newImage("Backdrops/play.png")
+    local gameOver = love.graphics.newImage("Backdrops/gameOver.png")
+    local scoreBoard = love.graphics.newImage("Backdrops/scoreBoard.png")
+    local plateSprite = love.graphics.newImage("Sprites/plate.png")
 
-    _G.lives6 = love.graphics.newImage("Heart/Heart.png")
-    _G.lives5 = love.graphics.newImage("Heart/Heart1.png")
-    _G.lives4 = love.graphics.newImage("Heart/Heart2.png")
-    _G.lives3 = love.graphics.newImage("Heart/Heart3.png")
-    _G.lives2 = love.graphics.newImage("Heart/Heart4.png")
-    _G.lives1 = love.graphics.newImage("Heart/Heart5.png")
+    local lives6 = love.graphics.newImage("Heart/Heart6.png")
+    local lives5 = love.graphics.newImage("Heart/Heart5.png")
+    local lives4 = love.graphics.newImage("Heart/Heart4.png")
+    local lives3 = love.graphics.newImage("Heart/Heart3.png")
+    local lives2 = love.graphics.newImage("Heart/Heart2.png")
+    local lives1 = love.graphics.newImage("Heart/Heart1.png")
 
-    _G.scoreFont = love.graphics.newFont("Font/pixel.regular.ttf", 50) 
-    love.graphics.setFont(scoreFont)
+    local scoreFont = love.graphics.newFont("Font/pixel.regular.ttf", 50) 
+    local graphics.setFont(scoreFont)
 
-    _G.score = 0
-    _G.lives = 6
+    local score = 0
+    local lives = 6
 
     _G.plate = Plate.new(500)
 
-    _G.gameMode = "start"
+    local gameMode = "start"
 end
 
 function love.keypressed(key)
