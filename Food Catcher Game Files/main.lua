@@ -24,33 +24,44 @@ function love.load()
         vsync = true
     })
 
-    local start = love.graphics.newImage("Backdrops/start.png")
-    local play = love.graphics.newImage("Backdrops/play.png")
-    local gameOver = love.graphics.newImage("Backdrops/gameOver.png")
-    local scoreBoard = love.graphics.newImage("Backdrops/scoreBoard.png")
-    local plateSprite = love.graphics.newImage("Sprites/plate.png")
+    _G.start = love.graphics.newImage("Backdrops/start.png")
+    _G.play = love.graphics.newImage("Backdrops/play.png")
+    _G.gameOver = love.graphics.newImage("Backdrops/gameOver.png")
+    _G.scoreBoard = love.graphics.newImage("Backdrops/scoreBoard.png")
+    _G.plateSprite = love.graphics.newImage("Sprites/plate.png")
 
-    local lives6 = love.graphics.newImage("Heart/Heart6.png")
-    local lives5 = love.graphics.newImage("Heart/Heart5.png")
-    local lives4 = love.graphics.newImage("Heart/Heart4.png")
-    local lives3 = love.graphics.newImage("Heart/Heart3.png")
-    local lives2 = love.graphics.newImage("Heart/Heart2.png")
-    local lives1 = love.graphics.newImage("Heart/Heart1.png")
+    _G.lives6 = love.graphics.newImage("Heart/Heart6.png")
+    _G.lives5 = love.graphics.newImage("Heart/Heart5.png")
+    _G.lives4 = love.graphics.newImage("Heart/Heart4.png")
+    _G.lives3 = love.graphics.newImage("Heart/Heart3.png")
+    _G.lives2 = love.graphics.newImage("Heart/Heart2.png")
+    _G.lives1 = love.graphics.newImage("Heart/Heart1.png")
 
-    local scoreFont = love.graphics.newFont("Font/pixel.regular.ttf", 50) 
-    local graphics.setFont(scoreFont)
+    _G.scoreFont = love.graphics.newFont("Font/pixel.regular.ttf", 50) 
+    love.graphics.setFont(scoreFont)
 
-    local score = 0
-    local lives = 6
+    backgroundAudio = love.audio.newSource("Audio/Abstraction - Ludum Dare 38 Loops/Ludum Dare 38 - Track 1.wav", "stream")
+    backgroundAudio:setVolume(0.4)
+    pickUpSound = love.audio.newSource("Audio/FreeSFX/FreeSFX/GameSFX/PickUp/Retro PickUp Coin 04.wav", "static")
+    pickUpSound:setVolume(0.15)
+    dropSound = love.audio.newSource("Audio/FreeSFX/FreeSFX/GameSFX/Events/Wrong/Retro Event Wrong Simple 03.wav", "static")
+    dropSound:setVolume(2.1)
+    gameOverSound = love.audio.newSource("Audio/FreeSFX/FreeSFX/GameSFX/Events/Negative/Retro Negative Short 23.wav", "static")
+    gameOverSound:setVolume(0.4)
+
+    _G.score = 0
+    _G.lives = 6
 
     _G.plate = Plate.new(500)
 
-    local gameMode = "start"
+    _G.gameMode = "start"
+    love.audio.play(backgroundAudio)
 end
 
 function love.keypressed(key)
-    if key == "space" then
-        _G.gameMode = "resetScore"
+    if key == "space" and gameMode == "gameOver" or gameMode == "start" then
+        lives = 6
+        score = 0
         _G.gameMode = "play"
     end
     if key == "escape" then
@@ -69,13 +80,25 @@ function love.update(dt)
             Food.caught = true
             _G.score = score + 1
             table.remove(foods, i)
+
+            if gameMode == "play" then
+                love.audio.play(pickUpSound)
+            end
         end
 
         if food.y > WINDOW_HEIGHT then
             table.remove(foods, i)
             _G.lives = lives - 1
+
+            if gameMode == "play" then
+                love.audio.play(dropSound)
+            end
+            if lives == 0 then 
+                love.audio.play(gameOverSound)
+            end
         end
     end
+
 
     spawnTimer = spawnTimer + dt
     if spawnTimer >= 1 then
@@ -112,8 +135,6 @@ function love.update(dt)
 
     if lives == 0 then
         _G.gameMode = "gameOver"
-        _G.score = 0
-        _G.lives = 6
     end
 end
 
