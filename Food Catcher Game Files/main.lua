@@ -40,13 +40,13 @@ function love.load()
     _G.scoreFont = love.graphics.newFont("Font/pixel.regular.ttf", 50) 
     love.graphics.setFont(scoreFont)
 
-    backgroundAudio = love.audio.newSource("Audio/Abstraction - Ludum Dare 38 Loops/Ludum Dare 38 - Track 1.wav", "stream")
+    backgroundAudio = love.audio.newSource("Audio/Ludum Dare 38 - Track 1.wav", "stream")
     backgroundAudio:setVolume(0.4)
-    pickUpSound = love.audio.newSource("Audio/FreeSFX/FreeSFX/GameSFX/PickUp/Retro PickUp Coin 04.wav", "static")
+    pickUpSound = love.audio.newSource("Audio/GameSFX/Retro PickUp Coin 04.wav", "static")
     pickUpSound:setVolume(0.15)
-    dropSound = love.audio.newSource("Audio/FreeSFX/FreeSFX/GameSFX/Events/Wrong/Retro Event Wrong Simple 03.wav", "static")
+    dropSound = love.audio.newSource("Audio/GameSFX/Retro Event Wrong Simple 03.wav", "static")
     dropSound:setVolume(2.1)
-    gameOverSound = love.audio.newSource("Audio/FreeSFX/FreeSFX/GameSFX/Events/Negative/Retro Negative Short 23.wav", "static")
+    gameOverSound = love.audio.newSource("Audio/GameSFX/Retro Negative Short 23.wav", "static")
     gameOverSound:setVolume(0.4)
 
     _G.score = 0
