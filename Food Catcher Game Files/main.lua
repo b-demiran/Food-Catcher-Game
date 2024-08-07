@@ -37,17 +37,18 @@ function love.load()
     _G.lives2 = love.graphics.newImage("Heart/Heart2.png")
     _G.lives1 = love.graphics.newImage("Heart/Heart1.png")
 
-    _G.scoreFont = love.graphics.newFont("Font/pixel.regular.ttf", 50) 
+    _G.scoreFont = love.graphics.newFont("Font/pixel.regular.ttf", 50)
     love.graphics.setFont(scoreFont)
 
-    backgroundAudio = love.audio.newSource("Audio/Ludum Dare 38 - Track 1.wav", "stream")
-    backgroundAudio:setVolume(0.4)
-    pickUpSound = love.audio.newSource("Audio/GameSFX/Retro PickUp Coin 04.wav", "static")
-    pickUpSound:setVolume(0.15)
-    dropSound = love.audio.newSource("Audio/GameSFX/Retro Event Wrong Simple 03.wav", "static")
-    dropSound:setVolume(2.1)
-    gameOverSound = love.audio.newSource("Audio/GameSFX/Retro Negative Short 23.wav", "static")
-    gameOverSound:setVolume(0.4)
+    _G.backgroundAudio = love.audio.newSource("Audio/Ludum Dare 38 - Track 1.wav", "stream")
+    _G.backgroundAudio:setVolume(0.4)
+    _G.backgroundAudio:setLooping(true)
+    _G.pickUpSound = love.audio.newSource("Audio/GameSFX/Retro PickUp Coin 04.wav", "static")
+    _G.pickUpSound:setVolume(0.15)
+    _G.dropSound = love.audio.newSource("Audio/GameSFX/Retro Event Wrong Simple 03.wav", "static")
+    _G.dropSound:setVolume(2.1)
+    _G.gameOverSound = love.audio.newSource("Audio/GameSFX/Retro Negative Short 23.wav", "static")
+    _G.gameOverSound:setVolume(0.4)
 
     _G.score = 0
     _G.lives = 6
@@ -55,7 +56,8 @@ function love.load()
     _G.plate = Plate.new(500)
 
     _G.gameMode = "start"
-    love.audio.play(backgroundAudio)
+    backgroundAudio:setLooping(true)
+    backgroundAudio:play()
 end
 
 function love.keypressed(key)
@@ -82,7 +84,7 @@ function love.update(dt)
             table.remove(foods, i)
 
             if gameMode == "play" then
-                love.audio.play(pickUpSound)
+                pickUpSound:play()
             end
         end
 
@@ -91,10 +93,10 @@ function love.update(dt)
             _G.lives = lives - 1
 
             if gameMode == "play" then
-                love.audio.play(dropSound)
+                dropSound:play()
             end
-            if lives == 0 then 
-                love.audio.play(gameOverSound)
+            if lives == 0 then
+                gameOverSound:play()
             end
         end
     end
@@ -123,7 +125,7 @@ function love.update(dt)
     if score >= 20 then
         _G.scoreX = 112
     end
-    if score >=100 then
+    if score >= 100 then
         _G.scoreX = 105
     end
     if score >= 120 then
@@ -189,11 +191,10 @@ end
 function love.draw()
     if gameMode == "start" then
         love.graphics.draw(start, 0, 0)
-
     elseif gameMode == "play" then
         love.graphics.draw(play, 0, 0)
         love.graphics.draw(scoreBoard)
-        love.graphics.setColor(72/255, 60/255, 50/255, 1)
+        love.graphics.setColor(72 / 255, 60 / 255, 50 / 255, 1)
         love.graphics.print(tostring(score), scoreX, 45)
         love.graphics.setColor(1, 1, 1)
 
@@ -218,7 +219,6 @@ function love.draw()
         for _, food in ipairs(foods) do
             food:draw()
         end
-
     elseif gameMode == "gameOver" then
         love.graphics.draw(gameOver, 0, 0)
     end
