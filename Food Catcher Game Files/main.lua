@@ -80,6 +80,26 @@ function love.load()
     table.insert(buttons, createButton(50, 600, 200, 50, "Exit", function()
         love.event.quit()
     end))
+    table.insert(buttons, createButton(770, 10, 200, 50, "Mute", function()
+        muteAndUnmute()
+    end))
+end
+
+--function is called when try again button is pressed in game over menu
+function tryAgain()
+    _G.gameMode = "play"
+    _G.lives = 6
+    _G.score = 0
+end
+
+function muteAndUnmute()
+    if audio == "muted" then
+        love.audio.play(backgroundAudio, pickUpSound, dropSound, gameOverSound)
+        _G.audio = "playing"
+    else
+        love.audio.stop(backgroundAudio, pickUpSound, dropSound, gameOverSound)
+        _G.audio = "muted"
+    end
 end
 
 function love.mousepressed(x, y, button, istouch, presses)
@@ -233,13 +253,6 @@ function resetSpawnTimer()
     spawnInterval = 1
 end
 
---function is called when try again button is pressed in game over menu
-function tryAgain()
-    _G.gameMode = "play"
-    _G.lives = 6
-    _G.score = 0
-end
-
 function love.draw()
     --draw appropriate screen based on current game state
     if gameMode == "start" then
@@ -287,15 +300,20 @@ function love.draw()
         end
     elseif gameMode == "gameOver" then
         love.graphics.draw(gameOver, 0, 0)
+
+        --create and draw buttons
         buttons = {}
-        table.insert(buttons, createButton(50, 600, 200, 50, "Exit", function()
-            love.event.quit()
-        end))
 
         table.insert(buttons, createButton(120, 525, 200, 50, "Try Again", function()
             tryAgain()
         end))
-        --draw buttons
+        table.insert(buttons, createButton(50, 600, 200, 50, "Exit", function()
+            love.event.quit()
+        end))
+        table.insert(buttons, createButton(770, 10, 200, 50, "Mute", function()
+            muteAndUnmute()
+        end))
+
         for _, button in ipairs(buttons) do
             love.graphics.setColor(1, 1, 1)
             love.graphics.setFont(dogica)
