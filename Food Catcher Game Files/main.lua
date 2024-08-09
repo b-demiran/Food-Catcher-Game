@@ -13,12 +13,14 @@ local Food = require("Food")
 
 --Game state variables
 local foods = {}
+local buttons = {}
 local spawnTimer = 0
 local spawnInterval = 1
 
 --Constants
 WINDOW_HEIGHT = 750
 WINDOW_WIDTH = 1000
+
 
 function love.load()
     love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {
@@ -43,8 +45,8 @@ function love.load()
     _G.lives1 = love.graphics.newImage("Heart/Heart1.png")
 
     --load fonts
-    _G.scoreFont = love.graphics.newFont("Font/pixel.regular.ttf", 50)
-    love.graphics.setFont(scoreFont)
+    _G.scoreFont = love.graphics.newFont("Fonts/pixel.regular.ttf", 50)
+    _G.dogica = love.graphics.newFont("Fonts/dogica/TTF/dogicapixelbold.ttf", 35)
 
     --load sounds
     _G.backgroundAudio = love.audio.newSource("Audio/Ludum Dare 38 - Track 1.wav", "stream")
@@ -59,7 +61,7 @@ function love.load()
 
     _G.gameOverSound = love.audio.newSource("Audio/GameSFX/Retro Negative Short 23.wav", "static")
     _G.gameOverSound:setVolume(0.4)
-    
+
     backgroundAudio:setLooping(true)
     backgroundAudio:play()
 
@@ -70,16 +72,24 @@ function love.load()
 
     --create plate object
     _G.plate = Plate.new(500)
+
+    --create buttons
+    table.insert(buttons, createButton(150, 525, 200, 50, "Start Game", function()
+        _G.gameMode = "play"
+    end))
+    table.insert(buttons, createButton(50, 600, 200, 50, "Exit", function()
+        love.event.quit()
+    end))
 end
 
-function love.keypressed(key) --fix this??????
-    if key == "space" and gameMode == "gameOver" or gameMode == "start" then
-        _G.lives = 6
-        _G.score = 0
-        _G.gameMode = "play"
-    end
-    if key == "escape" then
-        _G.gameMode = "start"
+function love.mousepressed(x, y, button, istouch, presses)
+    if button == 1 then --1 == left click
+        for _, btn in ipairs(buttons) do
+            --check if the mouse is inside the button's bounds
+            if x > btn.x and x < btn.x + btn.width and y > btn.y and y < btn.y + btn.height then
+                btn.onClick() --call the button's onClick function
+            end
+        end
     end
 end
 
@@ -105,7 +115,7 @@ function love.update(dt)
         if food.y > WINDOW_HEIGHT then
             table.remove(foods, i)
             _G.lives = lives - 1
-            
+
             --play sound when food has been dropped
             if gameMode == "play" then
                 dropSound:play()
@@ -178,6 +188,18 @@ function checkCollision(food, plate)
     end
 end
 
+--create buttons
+function createButton(x, y, width, height, text, onClick)
+    return {
+        x = x,
+        y = y,
+        width = width,
+        height = height,
+        text = text,
+        onClick = onClick
+    }
+end
+
 function spawnFood()
     --randomly select food item to spawn
     local foodType = love.math.random(1, 8)
@@ -211,16 +233,34 @@ function resetSpawnTimer()
     spawnInterval = 1
 end
 
+--function is called when try again button is pressed in game over menu
+function tryAgain()
+    _G.gameMode = "play"
+    _G.lives = 6
+    _G.score = 0
+end
+
 function love.draw()
     --draw appropriate screen based on current game state
     if gameMode == "start" then
         love.graphics.draw(start, 0, 0)
+        --draw buttons
+        for _, button in ipairs(buttons) do
+            love.graphics.setColor(1, 1, 1)
+            love.graphics.setFont(dogica)
+            local textWidth = dogica:getWidth(button.text)
+            local textHeight = dogica:getHeight(button.text)
+            love.graphics.print(button.text, button.x + (button.width - textWidth) / 2,
+                button.y + (button.height - textHeight) / 2)
+        end
     elseif gameMode == "play" then
         love.graphics.draw(play, 0, 0)
         love.graphics.draw(scoreBoard)
         love.graphics.setColor(72 / 255, 60 / 255, 50 / 255, 1)
+        love.graphics.setFont(scoreFont)
         love.graphics.print(tostring(score), scoreX, 45)
         love.graphics.setColor(1, 1, 1)
+
 
         local livesX = 87
         local livesY = 125
@@ -247,5 +287,22 @@ function love.draw()
         end
     elseif gameMode == "gameOver" then
         love.graphics.draw(gameOver, 0, 0)
+        buttons = {}
+        table.insert(buttons, createButton(50, 600, 200, 50, "Exit", function()
+            love.event.quit()
+        end))
+
+        table.insert(buttons, createButton(120, 525, 200, 50, "Try Again", function()
+            tryAgain()
+        end))
+        --draw buttons
+        for _, button in ipairs(buttons) do
+            love.graphics.setColor(1, 1, 1)
+            love.graphics.setFont(dogica)
+            local textWidth = dogica:getWidth(button.text)
+            local textHeight = dogica:getHeight(button.text)
+            love.graphics.print(button.text, button.x + (button.width - textWidth) / 2,
+                button.y + (button.height - textHeight) / 2)
+        end
     end
 end
