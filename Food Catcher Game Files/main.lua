@@ -1,15 +1,14 @@
---Dependencies
 _G.love = require("love")
-local Plate = require("Plate")
-local Burger = require("Burger")
-local Burrito = require("Burrito")
-local Hotdog = require("Hotdog")
-local Pizza = require("Pizza")
-local Taco = require("Taco")
-local Pie = require("Pie")
-local Cake = require("Cake")
-local Egg = require("Egg")
-local Food = require("Food")
+local Plate = require("Scripts.Plate")
+local Burger = require("Scripts.Foods.Burger")
+local Burrito = require("Scripts.Foods.Burrito")
+local Hotdog = require("Scripts.Foods.Hotdog")
+local Pizza = require("Scripts.Foods.Pizza")
+local Taco = require("Scripts.Foods.Taco")
+local Pie = require("Scripts.Foods.Pie")
+local Cake = require("Scripts.Foods.Cake")
+local Egg = require("Scripts.Foods.Egg")
+local Food = require("Scripts.Foods.Food")
 
 --Game state variables
 local foods = {}
@@ -30,36 +29,36 @@ function love.load()
     })
 
     --load images for game states and sprites
-    _G.start = love.graphics.newImage("Backdrops/startMenu.png")
-    _G.play = love.graphics.newImage("Backdrops/background.png")
-    _G.gameOver = love.graphics.newImage("Backdrops/startMenu.png")
-    _G.scoreBoard = love.graphics.newImage("Backdrops/scoreBoard.png")
-    _G.plateSprite = love.graphics.newImage("Sprites/plate.png")
+    _G.start = love.graphics.newImage("Assets/Backdrops/startMenu.png")
+    _G.play = love.graphics.newImage("Assets/Backdrops/background.png")
+    _G.gameOver = love.graphics.newImage("Assets/Backdrops/startMenu.png")
+    _G.scoreBoard = love.graphics.newImage("Assets/Backdrops/scoreBoard.png")
+    _G.plateSprite = love.graphics.newImage("Assets/Sprites/plate.png")
 
     --load images for life states
-    _G.lives6 = love.graphics.newImage("Heart/Heart6.png")
-    _G.lives5 = love.graphics.newImage("Heart/Heart5.png")
-    _G.lives4 = love.graphics.newImage("Heart/Heart4.png")
-    _G.lives3 = love.graphics.newImage("Heart/Heart3.png")
-    _G.lives2 = love.graphics.newImage("Heart/Heart2.png")
-    _G.lives1 = love.graphics.newImage("Heart/Heart1.png")
+    _G.lives6 = love.graphics.newImage("Assets/Heart/Heart6.png")
+    _G.lives5 = love.graphics.newImage("Assets/Heart/Heart5.png")
+    _G.lives4 = love.graphics.newImage("Assets/Heart/Heart4.png")
+    _G.lives3 = love.graphics.newImage("Assets/Heart/Heart3.png")
+    _G.lives2 = love.graphics.newImage("Assets/Heart/Heart2.png")
+    _G.lives1 = love.graphics.newImage("Assets/Heart/Heart1.png")
 
     --load fonts
-    _G.scoreFont = love.graphics.newFont("Fonts/pixel.regular.ttf", 50)
-    _G.dogica = love.graphics.newFont("Fonts/dogica/TTF/dogicapixelbold.ttf", 35)
+    _G.scoreFont = love.graphics.newFont("Assets/Fonts/pixel.regular.ttf", 50)
+    _G.dogica = love.graphics.newFont("Assets/Fonts/dogica/TTF/dogicapixelbold.ttf", 35)
 
     --load sounds
-    _G.backgroundAudio = love.audio.newSource("Audio/Ludum Dare 38 - Track 1.wav", "stream")
+    _G.backgroundAudio = love.audio.newSource("Assets/Audio/Ludum Dare 38 - Track 1.wav", "stream")
     _G.backgroundAudio:setVolume(0.4)
     _G.backgroundAudio:setLooping(true)
 
-    _G.pickUpSound = love.audio.newSource("Audio/GameSFX/Retro PickUp Coin 04.wav", "static")
+    _G.pickUpSound = love.audio.newSource("Assets/Audio/GameSFX/Retro PickUp Coin 04.wav", "static")
     _G.pickUpSound:setVolume(0.15)
 
-    _G.dropSound = love.audio.newSource("Audio/GameSFX/Retro Event Wrong Simple 03.wav", "static")
+    _G.dropSound = love.audio.newSource("Assets/Audio/GameSFX/Retro Event Wrong Simple 03.wav", "static")
     _G.dropSound:setVolume(2.1)
 
-    _G.gameOverSound = love.audio.newSource("Audio/GameSFX/Retro Negative Short 23.wav", "static")
+    _G.gameOverSound = love.audio.newSource("Assets/Audio/GameSFX/Retro Negative Short 23.wav", "static")
     _G.gameOverSound:setVolume(0.4)
 
     backgroundAudio:setLooping(true)

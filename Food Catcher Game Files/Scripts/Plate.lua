@@ -8,7 +8,7 @@ function Plate.new(x)
     self.speed = 550
     self.width = 194
     self.height = 107
-    
+
 
     function self:update(dt)
         local dx = 0
@@ -27,7 +27,7 @@ function Plate.new(x)
     end
 
     function self:draw()
-            love.graphics.draw(plateSprite, self.x, self.y)
+        love.graphics.draw(plateSprite, self.x, self.y)
     end
 
     return self
